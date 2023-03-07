@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using TIcTackToe.BLL.Models.DTO;
 using TicTacToe.DataModels.DAL;
 
 namespace TIcTackToe.BLL.Services
@@ -31,14 +33,24 @@ namespace TIcTackToe.BLL.Services
             await efContext.SaveChangesAsync();
         }
 
-        public async Task<Player> GetPlayer(int id)
+        public async Task<PlayerDTOGet> GetPlayerAsync(int id)
         {
-            return await efContext.Players.FindAsync(id) ?? throw new Exception("not found");
+            var player = await efContext.Players.FindAsync(id) ?? throw new Exception("not found");
+            return new PlayerDTOGet { Name = player.Name };
         }
 
-        public IEnumerable<Player> GetPlayers()
+        public IEnumerable<PlayerDTOGet> GetPlayers()
         {
-            return efContext.Players;
+            return efContext.Players.Select(p => new PlayerDTOGet
+            {
+                Name = p.Name
+            }).AsNoTracking();
+        }
+
+        public async Task DeletePlayerAsync(int id)
+        {
+            var player =  await efContext.Players.FindAsync(id) ?? throw new Exception("not found");
+            efContext.Players.Remove(player);
         }
     }
 }
