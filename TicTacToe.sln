@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.DAL", "TicTacToe.DAL\TicTacToe.DAL.csproj", "{29E38EBD-06A0-4157-ADFE-EF33EA72B0FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIcTackToe.BLL", "TIcTackToe.BLL\TIcTackToe.BLL.csproj", "{E27773BB-E863-4138-B622-BCA683E8575E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIcTacToe.BLL", "TIcTackToe.BLL\TIcTacToe.BLL.csproj", "{E27773BB-E863-4138-B622-BCA683E8575E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

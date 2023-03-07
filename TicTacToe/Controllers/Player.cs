@@ -5,6 +5,7 @@ using TIcTackToe.BLL.Services;
 namespace TicTacToe.Controllers
 {
     [ApiController]
+    [Route("[controller]/")]
     public class Player : ControllerBase
     {
         private readonly PlayerService playerService;
@@ -20,7 +21,7 @@ namespace TicTacToe.Controllers
             return Ok(players);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult> Index(int id)
         {
             PlayerDTOGet player;

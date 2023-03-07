@@ -5,6 +5,7 @@ using TicTacToe.Services;
 namespace TicTacToe.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class Room : ControllerBase
     {
         private readonly RoomService roomService;
