@@ -1,15 +1,13 @@
-﻿using TicTacToe.DataModels.DAL;
-
-namespace TicTacToe.Models.DTO
+﻿namespace TicTacToe.Models.DTO
 {
     public class RoomDTOCreate
     {
-        public Player PlayerX { get; set; }
-        public Player Player0 { get; set; }
-        public RoomDTOCreate(Player playerX, Player player0)
+        public int PlayerXId { get; set; }
+        public int Player0Id { get; set; }
+        public RoomDTOCreate(int playerXId, int player0Id)
         {
-            PlayerX = playerX;
-            Player0 = player0;
+            PlayerXId = playerXId;
+            Player0Id = player0Id;
         }
     }
 }

@@ -21,18 +21,26 @@ namespace TicTacToe.Services
             return room;
         }
 
-        public async Task Create(RoomDTOCreate roomDTO)
+        public async Task CreateAsync(RoomDTOCreate roomDTO)
         {
+            var playerX = await db.Players.FindAsync(roomDTO.PlayerXId);
+            if (playerX == null)
+                throw new Exception("player X not found");
+
+            var player0 = await db.Players.FindAsync(roomDTO.Player0Id);
+            if (player0 == null)
+                throw new Exception("player 0 not found");
+
             var room = new Room
             {
-                PlayerX = roomDTO.PlayerX,
-                Player0 = roomDTO.Player0
+                PlayerX = playerX,
+                Player0 = player0
             };
             await db.Rooms.AddAsync(room);
             await db.SaveChangesAsync();
         }
 
-        public async Task<RoomDTOGet> GetRoom(int id)
+        public async Task<RoomDTOGet> GetRoomAsync(int id)
         {
             var room = await FindRoomAsync(id);
             var roomDTO = new RoomDTOGet(room.PlayerX, room.Player0)
@@ -43,7 +51,7 @@ namespace TicTacToe.Services
             return roomDTO;
         }
 
-        public async Task<GameState> Move(int roomId, byte row, byte col)
+        public async Task<GameState> MoveAsync(int roomId, byte row, byte col)
         {
             var room = await FindRoomAsync(roomId);
             var game = new Game(room);
@@ -70,7 +78,7 @@ namespace TicTacToe.Services
             };
         }
 
-        public async Task<object> GetGame(int roomId)
+        public async Task<object> GetGameAsync(int roomId)
         {
             var room = await FindRoomAsync(roomId);
             var game = new Game(room);
