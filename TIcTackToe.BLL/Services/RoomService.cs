@@ -118,6 +118,8 @@ namespace TicTacToe.Services
                 room.Steps?.Remove(room.Steps.Last());
                 await db.SaveChangesAsync();
             }
+            else
+                throw new Exception("game already over");
         }
     }
 }
