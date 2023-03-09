@@ -31,61 +31,93 @@ namespace TicTacToe.Services
             if (player0 == null)
                 throw new Exception("player 0 not found");
 
-            var room = new Room
+            if (player0.Id != playerX.Id)
             {
-                PlayerX = playerX,
-                Player0 = player0
-            };
-            await db.Rooms.AddAsync(room);
-            await db.SaveChangesAsync();
+                var room = new Room
+                {
+                    PlayerX = playerX,
+                    Player0 = player0
+                };
+                await db.Rooms.AddAsync(room);
+                await db.SaveChangesAsync();
+            }
+            else
+                throw new Exception("can't be create games with 1 player");
         }
 
         public async Task<RoomDTOGet> GetRoomAsync(int id)
         {
             var room = await FindRoomAsync(id);
-            var roomDTO = new RoomDTOGet(room.PlayerX, room.Player0)
+            var roomDTO = new RoomDTOGet(room.PlayerX!, room.Player0!)
             {
+                Id = room.Id,
+                Fields = new Game(room).Fields,
                 IsOver = room.IsOver,
                 Steps = room.Steps,
+                PlayerWin = room.PlayerWin
             };
             return roomDTO;
         }
 
-        public async Task<GameState> MoveAsync(int roomId, byte row, byte col)
+        public IEnumerable<RoomDTOGet> GetRooms()
         {
-            var room = await FindRoomAsync(roomId);
-            var game = new Game(room);
-
-            if (game.CanMove(row, col))
+            var rooms = db.Rooms.Select(r => new RoomDTOGet(r.PlayerX!, r.Player0!)
             {
-                room.Steps ??= new List<Step>();
-                room.Steps.Add(new Step()
-                {
-                    Row = row,
-                    Col = col,
-                    Value = game.CurrentValue()
-                });
-                await db.SaveChangesAsync();
-            }
-            else
-                throw new Exception("is already taken");
-
-            return game.CurrentValue() switch
-            {
-                'x' => GameState.WinX,
-                '0' => GameState.Win0,
-                _ => GameState.None,
-            };
+                Id = r.Id,
+                Fields = new Game(r).Fields,
+                Steps = r.Steps,
+                IsOver = r.IsOver,
+                PlayerWin = r.PlayerWin
+            });
+            return rooms;
         }
 
-        public async Task<object> GetGameAsync(int roomId)
+        public async Task MoveAsync(int roomId, int row, int col)
         {
             var room = await FindRoomAsync(roomId);
-            var game = new Game(room);
-            return new
+            if (!room.IsOver)
             {
-                fields = game.Fields,
-            };
+                var game = new Game(room);
+                if (game.CanMove(row, col))
+                {
+                    var currentVal = game.CurrentValue();
+                    room.Steps ??= new List<Step>();
+                    room.Steps.Add(new Step()
+                    {
+                        Row = row,
+                        Col = col,
+                        Value = currentVal
+                    });
+                    game.AddStep(row, col, currentVal);
+                    if (game.IsWin())
+                    {
+                        room.IsOver = true;
+                        room.PlayerWin = currentVal == 'x' ? room.PlayerX : room.Player0;
+                    }
+                    await db.SaveChangesAsync();
+                }
+                else
+                    throw new Exception("is already taken");
+            }
+            else
+                throw new Exception("game over");
+        }
+
+        public async Task RemoveAsync(int roomId)
+        {
+            var room = await FindRoomAsync(roomId);
+            db.Remove(room);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task DeleteStep(int roomId)
+        {
+            var room = await FindRoomAsync(roomId);
+            if (!room.IsOver)
+            {
+                room.Steps?.Remove(room.Steps.Last());
+                await db.SaveChangesAsync();
+            }
         }
     }
 }
