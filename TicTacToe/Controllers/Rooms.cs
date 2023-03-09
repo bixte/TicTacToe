@@ -49,12 +49,12 @@ namespace TicTacToe.Controllers
             return Ok();
         }
 
-        [HttpPost("roomId/steps")]
-        public async Task<ActionResult> Move(RoomMoveViewModel viewModel)
+        [HttpPost("{roomId}/steps")]
+        public async Task<ActionResult> Move([FromRoute] int roomId, RoomMoveViewModel viewModel)
         {
             try
             {
-                await roomService.MoveAsync(viewModel.RoomId, viewModel.Row, viewModel.Column);
+                await roomService.MoveAsync(roomId, viewModel.Row, viewModel.Column);
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace TicTacToe.Controllers
             return Ok();
         }
 
-        [HttpDelete("roomId")]
+        [HttpDelete("{roomId}")]
         public async Task<ActionResult> DeleteRoom(int roomId)
         {
             try
@@ -77,8 +77,8 @@ namespace TicTacToe.Controllers
             return Ok();
         }
 
-        [HttpDelete("roomId/steps")]
-        public async Task<ActionResult> DeleteLastStep(int roomId)
+        [HttpDelete("{roomId}/steps")]
+        public async Task<ActionResult> DeleteLastStep([FromRoute] int roomId)
         {
             try
             {
