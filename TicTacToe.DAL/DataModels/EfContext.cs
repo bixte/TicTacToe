@@ -15,6 +15,8 @@ namespace TicTacToe.DataModels.DAL
             modelBuilder.Entity<Room>().Navigation(r => r.PlayerX).AutoInclude();
             modelBuilder.Entity<Room>().Navigation(r => r.Player0).AutoInclude();
             modelBuilder.Entity<Room>().Navigation(r => r.PlayerWin).AutoInclude();
+            modelBuilder.Entity<Room>().Navigation(r => r.Steps).AutoInclude();
+            modelBuilder.Entity<Room>().HasMany(r => r.Steps).WithOne().OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(modelBuilder);
         }
     }
