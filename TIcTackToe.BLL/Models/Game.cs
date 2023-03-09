@@ -6,13 +6,11 @@ namespace TicTacToe.Models
     {
         private readonly Room room;
         public char?[,] Fields { get; set; }
-
         public Game(Room room)
         {
             this.room = room;
             Fields = GetFields();
         }
-
         public bool CanMove(byte row, byte col)
         {
             if (!room.IsOver)
@@ -29,7 +27,6 @@ namespace TicTacToe.Models
                 return 'x';
             return '0';
         }
-
         public bool IsWin()
         {
             if (Fields[0, 0] == Fields[0, 1] && Fields[0, 0] == Fields[0, 2] ||
@@ -49,7 +46,6 @@ namespace TicTacToe.Models
             }
             return false;
         }
-
         private char?[,] GetFields()
         {
             var fields = new char?[3, 3];

@@ -8,7 +8,7 @@ namespace TicTacToe.DataModels.DAL
         public bool IsOver { get; set; } = false;
         public Player? PlayerX { get; set; } = null!;
         public Player? Player0 { get; set; } = null!;
-        public char? PlayerWin { get; set; }
+        public Player? PlayerWin { get; set; }
         public List<Step>? Steps { get; set; }
     }
 }
