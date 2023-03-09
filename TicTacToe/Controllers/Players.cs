@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TIcTackToe.BLL.Services;
+using TicTacToe.VIewModels;
 using TIcTacToe.BLL.Models.DTO;
 
 namespace TicTacToe.Controllers
@@ -51,11 +52,11 @@ namespace TicTacToe.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(string name)
+        public async Task<ActionResult> Create(PlayersCreateViewModel viewModel)
         {
             try
             {
-                await playerService.CreateAsync(name);
+                await playerService.CreateAsync(viewModel.Name);
             }
             catch (Exception ex)
             {

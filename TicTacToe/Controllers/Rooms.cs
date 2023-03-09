@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TicTacToe.Models.DTO;
 using TicTacToe.Services;
+using TicTacToe.VIewModels;
 
 namespace TicTacToe.Controllers
 {
@@ -34,9 +35,9 @@ namespace TicTacToe.Controllers
             return Ok(rooms);
         }
         [HttpPost]
-        public async Task<ActionResult> Create(int playerXId, int player0Id)
+        public async Task<ActionResult> Create(RoomCreateViewModel viewModel)
         {
-            var roomDTOCreate = new RoomDTOCreate(playerXId, player0Id);
+            var roomDTOCreate = new RoomDTOCreate(viewModel.PlayerXId, viewModel.Player0Id);
             try
             {
                 await roomService.CreateAsync(roomDTOCreate);
@@ -49,11 +50,11 @@ namespace TicTacToe.Controllers
         }
 
         [HttpPost("roomId/steps")]
-        public async Task<ActionResult> Move(int roomId, int row, int col)
+        public async Task<ActionResult> Move(RoomMoveViewModel viewModel)
         {
             try
             {
-                await roomService.MoveAsync(roomId, row, col);
+                await roomService.MoveAsync(viewModel.RoomId, viewModel.Row, viewModel.Column);
             }
             catch (Exception ex)
             {
